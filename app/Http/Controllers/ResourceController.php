@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Promosi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ResourceController extends Controller
 {
@@ -45,8 +46,9 @@ class ResourceController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $filePath = $request->file('image')->store("public"); 
-            $filePath = basename($filePath);
+            $filePath = Storage::putFile('promosi', $request->file('image'));
+            // $filePath = $request->file('image')->store("storage/promosi", "public"); 
+            // $filePath = basename($filePath);
         }
 
         // Save other data to the database
@@ -89,9 +91,12 @@ class ResourceController extends Controller
         $promo->image = $validatedData['image'];
 
         if ($request->hasFile('image')) {
-            $filePath = $request->file('image')->store("public");
-            $filePath = basename($filePath);
+            // $filePath = $request->file('image')->store("public");
+            // $filePath = basename($filePath);
+            // $promo->image = $filePath;
+            $filePath = Storage::putFile('promosi', $request->file('image'));
             $promo->image = $filePath;
+
         }
 
         $promo->save();
